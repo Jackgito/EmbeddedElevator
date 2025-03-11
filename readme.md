@@ -31,18 +31,6 @@ This project is the final coursework for the **Introduction to Embedded Systems*
 - **Juhani** – Project codebase setup and live demonstration
 - **Niklas** – Circuit diagram
 
-### **Project Timeline & Checkpoints**
-| Date  | Milestone |
-|-------|------------|
-| **18.3** | Circuit diagram and elevator movement draft completed |
-| **25.3** | Individual module implementation finished |
-| **5.4**  | Basic system integration (LCD, keypad, LEDs, movement) |
-| **12.4** | Communication between MEGA & UNO functional |
-| **19.4** | Emergency system and additional functionalities added |
-| **26.4** | Full system testing and debugging |
-| **3.5**  | Final refinements and optimization |
-| **5.9**  | Project submission and demonstration |
-
 ### **Circuit Diagram**
 - To be added
 
