@@ -12,6 +12,7 @@ This project is the final coursework for the **Introduction to Embedded Systems*
 - The system processes floor requests and moves the elevator accordingly.
 - A **movement LED** on UNO lights up when the elevator is in motion.
 - The LCD screen updates the **current floor number** during movement.
+- Elevator supports floor queue, meaning floor numbers can be entered while the elevator is moving, and will move according to queue.
 
 ### **3. Door Operation**
 - Upon reaching the destination, the **door LED** turns on for **5 seconds** to simulate door opening.
