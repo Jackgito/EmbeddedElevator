@@ -5,6 +5,8 @@
 #define MOVEMENT_LED_PIN 0  // Example: pin 0 on PORTB
 #define DOOR_LED_PIN 1      // Example: pin 1 on PORTB
 
+// Led controller can be used to turn the movement and door opening LEDs on and off. It also has blink function for emergencies.
+
 void led_init(void) {
 	DDRB |= (1 << MOVEMENT_LED_PIN) | (1 << DOOR_LED_PIN);
 	set_movement_led(0);

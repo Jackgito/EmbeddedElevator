@@ -5,7 +5,10 @@
 volatile uint8_t blink_count = 0;
 volatile uint8_t max_blinks = 0;
 
-// ISR (Interrupt Service Routine) controller improves responsiveness by handling events immediately, allowing the code to temporarily pause its current execution and jump to a specific task when an interrupt occurs. This eliminates delays and ensures faster system response.
+/* ISR (Interrupt Service Routine) controller improves responsiveness by handling events immediately, 
+allowing the code to temporarily pause its current execution and jump to a specific task when an interrupt occurs.
+This eliminates delays and ensures faster system response.
+*/
 
 void isr_init(void) {
 	sei(); // Enable global interrupts

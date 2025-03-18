@@ -110,12 +110,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="buzzer_controller\buzzer_controller.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="buzzer_controller\buzzer_controller.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="communication\communication_master.c">
       <SubType>compile</SubType>
     </Compile>
@@ -166,7 +160,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="buzzer_controller" />
     <Folder Include="communication\" />
     <Folder Include="elevator_controller" />
     <Folder Include="keypad_controller" />

@@ -6,6 +6,18 @@
 #define SPI_MISO PB4  // Master In Slave Out
 #define SPI_SCK  PB5  // Serial Clock
 
+/*
+SPI (Serial Peripheral Interface) is a communication protocol used communication between master (MEGA) and slave (UNO). It requires four signal lines:
+MISO (Master In Slave Out)
+MOSI (Master Out Slave In)
+SCK (Clock)
+SS (Slave Select)
+
+
+This small library implements SPI communication for a master device. It listens to slave to detect if emergency button was pressed.
+*/
+
+
 void initSPI_Master() {
 	// Set SS, MOSI, and SCK as outputs
 	DDRB |= (1 << SPI_SS) | (1 << SPI_MOSI) | (1 << SPI_SCK);
@@ -20,6 +32,7 @@ void initSPI_Master() {
 	PORTB |= (1 << SPI_SS);
 }
 
+// This is probably not needed, since master is just receiving data from slave
 void sendSPI_Data(char *data, uint8_t length) {
 	// Enable Slave by setting SS LOW
 	PORTB &= ~(1 << SPI_SS);
