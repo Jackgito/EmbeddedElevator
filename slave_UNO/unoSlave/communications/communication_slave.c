@@ -36,6 +36,20 @@ void TWI_receive() {
     TWCR |= (1 << TWINT) | (1 << TWEA) | (1 << TWEN);
 }
 
+void TWI_send_data(char* data) {
+    // Send data byte by byte to the master
+    for (uint8_t i = 0; i < strlen(data); i++) {
+        TWDR = data[i];  // Load data into the TWI data register
+        TWCR = (1 << TWINT) | (1 << TWEN);  // Clear TWINT to continue communication
+        while (!(TWCR & (1 << TWINT))) {  // Wait until data is transmitted
+            ;
+        }
+    }
+    
+    // Clear TWINT flag to continue TWI operation
+    TWCR |= (1 << TWINT) | (1 << TWEA) | (1 << TWEN);
+}
+
 int main(void) {
     // Initialize TWI as slave
     TWI_init();

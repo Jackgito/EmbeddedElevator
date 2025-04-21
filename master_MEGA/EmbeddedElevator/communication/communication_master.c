@@ -4,6 +4,7 @@
 #include <util/delay.h>
 #include <stdio.h>
 #include <string.h>
+#include elevator_controller.h
 
 #define SLAVE_ADDRESS 0x57 // 7-bit address (0b1010111)
 

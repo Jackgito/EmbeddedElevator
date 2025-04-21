@@ -99,7 +99,7 @@ void emergency_stop(void) {
 	lcd_puts("EMERGENCY");
 
 	blink_led(MOVEMENT_LED_PIN, 3, 500);
-
+    
 	open_door();
 	play_melody();
 	close_door();
