@@ -48,5 +48,8 @@ This project is the final coursework for the **Introduction to Embedded Systems*
 | **Juhani**  | Project codebase setup & live demonstration |
 | **Niklas**  | Circuit diagram |
 
+## Image ##
+![picture](https://github.com/user-attachments/assets/0866b3c5-1862-4b96-8c9d-32f67bfdc57b)
+
 ## **Circuit Diagram**
 *To be added.*
