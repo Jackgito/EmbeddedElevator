@@ -1,41 +1,48 @@
+#define F_CPU 16000000UL
 #include "buzzer_controller.h"
+#include <avr/io.h>
+#include <util/delay.h>
 
-#define BUZZER_PIN PD2
+#define BUZZER_PIN PB3  // Digital pin 11
+#define BUZZER_NOTE_DURATION 500
 
-// Initialize the buzzer pin
 void buzzer_init(void) {
-	// Set buzzer pin as output (assuming PD2, adjust if needed)
-	DDRD |= (1 << BUZZER_PIN);
-	// Initially turn off the buzzer
-	PORTD &= ~(1 << BUZZER_PIN);
+	DDRB |= (1 << BUZZER_PIN);  // Set buzzer pin as output
 }
 
-// Function to play a melody with 4 notes
+void play_tone(uint16_t frequency) {
+	if (frequency == 0) return;
+
+	// Calculate OCR1A for Phase and Frequency Correct PWM (Mode 9)
+	uint16_t top = (F_CPU / (2UL * frequency));
+	OCR1A = top;
+
+	// Set Waveform Generation Mode 9 (PWM, Phase and Frequency Correct)
+	TCCR1A = (1 << COM1A0) | (1 << WGM10);  // Toggle OC1A on compare match
+	TCCR1B = (1 << WGM13) | (1 << CS10);    // No prescaler, Phase/Frequency Correct PWM mode
+
+	// Play tone for the specified duration
+	_delay_ms(100);
+
+	// Stop the tone after the duration
+	stop_tone();
+}
+
+void stop_tone(void) {
+	// Disable the timer to stop the buzzer tone
+	TCCR1A = 0;
+	TCCR1B = 0;
+
+	// Ensure buzzer is turned off
+	PORTB &= ~(1 << BUZZER_PIN);
+}
+
 void play_melody(void) {
-	// Define the melody notes (frequencies) and duration
-	// You can adjust the frequency and timing according to your needs
-	uint16_t melody[] = {262, 294, 330, 349}; // C, D, E, F notes in Hz
-	uint16_t duration[] = {500, 500, 500, 500}; // Duration in milliseconds
+	uint16_t melody[] = {262, 294, 330, 349};  // C4, D4, E4, F4
+	uint16_t duration[] = {300, 300, 300, 300};
 
-	// Loop through the melody and play each note
 	for (int i = 0; i < 4; i++) {
-		// Generate the tone for the current note
-		uint16_t frequency = melody[i];
-		uint16_t delay_time = duration[i];
-
-		// Turn on the buzzer
-		PORTD |= (1 << BUZZER_PIN);
-
-		// Create a tone with the specified frequency
-		uint16_t half_period = 1000000 / (2 * frequency); // Half-period in microseconds
-		for (int j = 0; j < delay_time * 1000 / (2 * half_period); j++) {
-			// Toggle the buzzer to produce a square wave
-			PORTD ^= (1 << BUZZER_PIN); // Toggle buzzer
-			_delay_us(half_period);      // Wait for half-period
-		}
-
-		// Turn off the buzzer after the note
-		PORTD &= ~(1 << BUZZER_PIN);
-		_delay_ms(50); // Short delay between notes
+		play_tone(melody[i]);
+		_delay_ms(100);  // Short pause between notes
 	}
 }

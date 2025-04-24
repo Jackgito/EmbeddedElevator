@@ -1,16 +1,52 @@
-// elevatorController.h
-#ifndef ELEVATOR_CONTROLLER_H
-#define ELEVATOR_CONTROLLER_H
+#ifndef ELEVATOR_CONTROLLER_H_
+#define ELEVATOR_CONTROLLER_H_
 
-#include <stdbool.h>  // For using bool type
+#include <stdint.h>
 
-// Function prototypes
-void elevator_init(void);  // Initialize elevator system
-void move_elevator(uint8_t floor);  // Move elevator to the selected floor
-void open_door(void);  // Open the elevator door
-void close_door(void);  // Close the elevator door
-void emergency_stop(void);  // Handle emergency stop
-void handle_fault(void);  // Handle fault if the selected floor is the same as the current floor
-void display_floor(uint8_t floor);  // Display the current floor on the LCD
+/**
+ * @brief Initializes elevator state and peripherals.
+ */
+void elevator_init(void);
 
-#endif
+/**
+ * @brief Resets the elevator UI to the default prompt ("Choose floor").
+ */
+void elevator_reset_ui(void);
+
+/**
+ * @brief Handles the movement of the elevator to a specific floor.
+ * 
+ * @param floor Target floor number.
+ */
+void move_elevator(uint8_t floor);
+
+/**
+ * @brief Opens the elevator door and triggers the appropriate UI and signals.
+ */
+void open_door(void);
+
+/**
+ * @brief Closes the elevator door and resets UI after a short delay.
+ */
+void close_door(void);
+
+/**
+ * @brief Immediately stops the elevator and triggers emergency behavior.
+ * Sends an emergency signal to the slave (e.g., blink + buzzer).
+ */
+void emergency_stop(void);
+
+/**
+ * @brief Handles a fault condition (e.g., same floor requested).
+ * Sends fault indication to slave and displays error.
+ */
+void handle_fault(void);
+
+/**
+ * @brief Displays the current floor and state on the LCD.
+ * 
+ * @param floor The floor number to display.
+ */
+void display_floor(uint8_t floor);
+
+#endif /* ELEVATOR_CONTROLLER_H_ */

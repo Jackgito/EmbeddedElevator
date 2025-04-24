@@ -1,34 +1,77 @@
-// main.c
+#define F_CPU 16000000UL
+
 #include <avr/io.h>
 #include <util/delay.h>
-#include "elevator_controller.h"
-#include "keypad_controller.h"
-#include "lcd_controller.h"
-#include "led_controller.h"
+#include <stdlib.h>
+#include "isr_controller/isr_controller.h"
+#include "elevator_controller/elevator_controller.h"
+#include "keypad_controller/keypad.h"
+#include "lcd_controller_MEGA/lcd.h"
+#include "uart_debug/uart_debug.h"
 
 #define MAX_FLOOR 99  // Assuming the maximum floor is 99
 
+// Main function handles inputs and interrups. Elevator logic is in the controller file
 int main(void) {
-	uint8_t target_floor = 0;  // Variable to store the floor selected with the numpad
+	uart_init(103); // UART for debug
+	lcd_init(LCD_DISP_ON);
+	lcd_clrscr();
+	KEYPAD_Init();
+	
+	elevator_reset_ui();  // Initial UI prompt
 
-	// Initialize the elevator system
-	elevator_init();
+	char input_buffer[3] = {0};  // Store up to 2 digits + null terminator
+	uint8_t buffer_index = 0;
+	
+	
+	// Set pin as input and enable internal pull-up to make ISR emergency system work
+	DDRE &= ~(1 << 4);    // Set PE4 as input
+	PORTE |= (1 << 4);    // Enable pull-up resistor on PE4
+
+	isr_init();
+	enable_external_interrupt(EMERGENCY_BUTTON_PIN);
 
 	while (1) {
-		// Wait for user input from the keypad
-		target_floor = KEYPAD_GetKey();
+		uint8_t key = KEYPAD_GetKey();
 
-		// Check if the input is within valid range (0 - 99)
-		if (target_floor <= MAX_FLOOR) {
-			// Move the elevator to the selected floor
-			move_elevator(target_floor);
-			} else {
-			// If the input is out of range, display an error message
-			lcd_clrscr();
-			lcd_puts("Invalid floor");
-			_delay_ms(1000);  // Wait for a while to let the user read the error
-			lcd_clrscr();
-			lcd_puts("Choose the floor");
+		if (key >= '0' && key <= '9' && buffer_index < 2) {
+			input_buffer[buffer_index++] = key;
+			input_buffer[buffer_index] = '\0';  // Null terminate
+			lcd_gotoxy(0, 1);  // Bottom line for live input
+			lcd_puts(input_buffer);
+			print(input_buffer);
+
+		} else if (key == '#') {
+			if (buffer_index > 0) {
+				uint8_t target_floor = atoi(input_buffer);
+
+				if (target_floor <= MAX_FLOOR) {
+					move_elevator(target_floor);
+					} else {
+					lcd_clrscr();
+					lcd_puts("Invalid floor");
+					print("Invalid floor");
+					_delay_ms(1000);
+					elevator_reset_ui();
+				}
+			}
+
+			// Reset input
+			buffer_index = 0;
+			input_buffer[0] = '\0';
+
+		} else if (key == '*') {
+			// Clear input
+			buffer_index = 0;
+			input_buffer[0] = '\0';
+			lcd_gotoxy(0, 1);
+			lcd_puts("              ");  // Clear line
+			lcd_gotoxy(0, 1);
+		} else { // Reset input
+			print("No such floor exists. Floor selection has been reset.");
+			buffer_index = 0;
+			input_buffer[0] = '\0';
 		}
 	}
 }
+

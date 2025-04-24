@@ -1,0 +1,654 @@
+
+unoSlave.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         0000002a  00800100  00000386  0000041a  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000386  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000015  0080012a  0080012a  00000444  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000444  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000474  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 000000c0  00000000  00000000  000004b0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000e2a  00000000  00000000  00000570  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000a0f  00000000  00000000  0000139a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000825  00000000  00000000  00001da9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  0000012c  00000000  00000000  000025d0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000004ff  00000000  00000000  000026fc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000002c7  00000000  00000000  00002bfb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000080  00000000  00000000  00002ec2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
+   4:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+   8:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+   c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  10:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  14:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  18:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  1c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  20:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  24:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  28:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  2c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  30:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  34:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  38:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  3c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  40:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  44:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  48:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  4c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  50:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  54:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  58:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  5c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  60:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  64:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+
+00000068 <__ctors_end>:
+  68:	11 24       	eor	r1, r1
+  6a:	1f be       	out	0x3f, r1	; 63
+  6c:	cf ef       	ldi	r28, 0xFF	; 255
+  6e:	d8 e0       	ldi	r29, 0x08	; 8
+  70:	de bf       	out	0x3e, r29	; 62
+  72:	cd bf       	out	0x3d, r28	; 61
+
+00000074 <__do_copy_data>:
+  74:	11 e0       	ldi	r17, 0x01	; 1
+  76:	a0 e0       	ldi	r26, 0x00	; 0
+  78:	b1 e0       	ldi	r27, 0x01	; 1
+  7a:	e6 e8       	ldi	r30, 0x86	; 134
+  7c:	f3 e0       	ldi	r31, 0x03	; 3
+  7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
+  80:	05 90       	lpm	r0, Z+
+  82:	0d 92       	st	X+, r0
+  84:	aa 32       	cpi	r26, 0x2A	; 42
+  86:	b1 07       	cpc	r27, r17
+  88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
+
+0000008a <__do_clear_bss>:
+  8a:	21 e0       	ldi	r18, 0x01	; 1
+  8c:	aa e2       	ldi	r26, 0x2A	; 42
+  8e:	b1 e0       	ldi	r27, 0x01	; 1
+  90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
+
+00000092 <.do_clear_bss_loop>:
+  92:	1d 92       	st	X+, r1
+
+00000094 <.do_clear_bss_start>:
+  94:	af 33       	cpi	r26, 0x3F	; 63
+  96:	b2 07       	cpc	r27, r18
+  98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
+  9a:	0e 94 45 01 	call	0x28a	; 0x28a <main>
+  9e:	0c 94 c1 01 	jmp	0x382	; 0x382 <_exit>
+
+000000a2 <__bad_interrupt>:
+  a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000a6 <buzzer_init>:
+
+#define BUZZER_PIN PB3  // Digital pin 11
+#define BUZZER_NOTE_DURATION 500
+
+void buzzer_init(void) {
+	DDRB |= (1 << BUZZER_PIN);  // Set buzzer pin as output
+  a6:	84 b1       	in	r24, 0x04	; 4
+  a8:	88 60       	ori	r24, 0x08	; 8
+  aa:	84 b9       	out	0x04, r24	; 4
+  ac:	08 95       	ret
+
+000000ae <stop_tone>:
+	stop_tone();
+}
+
+void stop_tone(void) {
+	// Disable the timer to stop the buzzer tone
+	TCCR1A = 0;
+  ae:	10 92 80 00 	sts	0x0080, r1	; 0x800080 <__TEXT_REGION_LENGTH__+0x7f8080>
+	TCCR1B = 0;
+  b2:	10 92 81 00 	sts	0x0081, r1	; 0x800081 <__TEXT_REGION_LENGTH__+0x7f8081>
+
+	// Ensure buzzer is turned off
+	PORTB &= ~(1 << BUZZER_PIN);
+  b6:	85 b1       	in	r24, 0x05	; 5
+  b8:	87 7f       	andi	r24, 0xF7	; 247
+  ba:	85 b9       	out	0x05, r24	; 5
+  bc:	08 95       	ret
+
+000000be <play_tone>:
+void buzzer_init(void) {
+	DDRB |= (1 << BUZZER_PIN);  // Set buzzer pin as output
+}
+
+void play_tone(uint16_t frequency) {
+	if (frequency == 0) return;
+  be:	00 97       	sbiw	r24, 0x00	; 0
+  c0:	19 f1       	breq	.+70     	; 0x108 <play_tone+0x4a>
+
+	// Calculate OCR1A for Phase and Frequency Correct PWM (Mode 9)
+	uint16_t top = (F_CPU / (2UL * frequency));
+  c2:	a0 e0       	ldi	r26, 0x00	; 0
+  c4:	b0 e0       	ldi	r27, 0x00	; 0
+  c6:	9c 01       	movw	r18, r24
+  c8:	ad 01       	movw	r20, r26
+  ca:	22 0f       	add	r18, r18
+  cc:	33 1f       	adc	r19, r19
+  ce:	44 1f       	adc	r20, r20
+  d0:	55 1f       	adc	r21, r21
+  d2:	60 e0       	ldi	r22, 0x00	; 0
+  d4:	74 e2       	ldi	r23, 0x24	; 36
+  d6:	84 ef       	ldi	r24, 0xF4	; 244
+  d8:	90 e0       	ldi	r25, 0x00	; 0
+  da:	0e 94 96 01 	call	0x32c	; 0x32c <__udivmodsi4>
+	OCR1A = top;
+  de:	30 93 89 00 	sts	0x0089, r19	; 0x800089 <__TEXT_REGION_LENGTH__+0x7f8089>
+  e2:	20 93 88 00 	sts	0x0088, r18	; 0x800088 <__TEXT_REGION_LENGTH__+0x7f8088>
+
+	// Set Waveform Generation Mode 9 (PWM, Phase and Frequency Correct)
+	TCCR1A = (1 << COM1A0) | (1 << WGM10);  // Toggle OC1A on compare match
+  e6:	81 e4       	ldi	r24, 0x41	; 65
+  e8:	80 93 80 00 	sts	0x0080, r24	; 0x800080 <__TEXT_REGION_LENGTH__+0x7f8080>
+	TCCR1B = (1 << WGM13) | (1 << CS10);    // No prescaler, Phase/Frequency Correct PWM mode
+  ec:	81 e1       	ldi	r24, 0x11	; 17
+  ee:	80 93 81 00 	sts	0x0081, r24	; 0x800081 <__TEXT_REGION_LENGTH__+0x7f8081>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  f2:	2f ef       	ldi	r18, 0xFF	; 255
+  f4:	81 ee       	ldi	r24, 0xE1	; 225
+  f6:	94 e0       	ldi	r25, 0x04	; 4
+  f8:	21 50       	subi	r18, 0x01	; 1
+  fa:	80 40       	sbci	r24, 0x00	; 0
+  fc:	90 40       	sbci	r25, 0x00	; 0
+  fe:	e1 f7       	brne	.-8      	; 0xf8 <play_tone+0x3a>
+ 100:	00 c0       	rjmp	.+0      	; 0x102 <play_tone+0x44>
+ 102:	00 00       	nop
+
+	// Play tone for the specified duration
+	_delay_ms(100);
+
+	// Stop the tone after the duration
+	stop_tone();
+ 104:	0e 94 57 00 	call	0xae	; 0xae <stop_tone>
+ 108:	08 95       	ret
+
+0000010a <play_melody>:
+
+	// Ensure buzzer is turned off
+	PORTB &= ~(1 << BUZZER_PIN);
+}
+
+void play_melody(void) {
+ 10a:	0f 93       	push	r16
+ 10c:	1f 93       	push	r17
+ 10e:	cf 93       	push	r28
+ 110:	df 93       	push	r29
+ 112:	cd b7       	in	r28, 0x3d	; 61
+ 114:	de b7       	in	r29, 0x3e	; 62
+ 116:	28 97       	sbiw	r28, 0x08	; 8
+ 118:	0f b6       	in	r0, 0x3f	; 63
+ 11a:	f8 94       	cli
+ 11c:	de bf       	out	0x3e, r29	; 62
+ 11e:	0f be       	out	0x3f, r0	; 63
+ 120:	cd bf       	out	0x3d, r28	; 61
+	uint16_t melody[] = {262, 294, 330, 349};  // C4, D4, E4, F4
+ 122:	88 e0       	ldi	r24, 0x08	; 8
+ 124:	e0 e0       	ldi	r30, 0x00	; 0
+ 126:	f1 e0       	ldi	r31, 0x01	; 1
+ 128:	de 01       	movw	r26, r28
+ 12a:	11 96       	adiw	r26, 0x01	; 1
+ 12c:	01 90       	ld	r0, Z+
+ 12e:	0d 92       	st	X+, r0
+ 130:	8a 95       	dec	r24
+ 132:	e1 f7       	brne	.-8      	; 0x12c <play_melody+0x22>
+	uint16_t duration[] = {300, 300, 300, 300};
+
+	for (int i = 0; i < 4; i++) {
+ 134:	00 e0       	ldi	r16, 0x00	; 0
+ 136:	10 e0       	ldi	r17, 0x00	; 0
+ 138:	18 c0       	rjmp	.+48     	; 0x16a <play_melody+0x60>
+		play_tone(melody[i]);
+ 13a:	f8 01       	movw	r30, r16
+ 13c:	ee 0f       	add	r30, r30
+ 13e:	ff 1f       	adc	r31, r31
+ 140:	81 e0       	ldi	r24, 0x01	; 1
+ 142:	90 e0       	ldi	r25, 0x00	; 0
+ 144:	8c 0f       	add	r24, r28
+ 146:	9d 1f       	adc	r25, r29
+ 148:	e8 0f       	add	r30, r24
+ 14a:	f9 1f       	adc	r31, r25
+ 14c:	80 81       	ld	r24, Z
+ 14e:	91 81       	ldd	r25, Z+1	; 0x01
+ 150:	0e 94 5f 00 	call	0xbe	; 0xbe <play_tone>
+ 154:	9f ef       	ldi	r25, 0xFF	; 255
+ 156:	21 ee       	ldi	r18, 0xE1	; 225
+ 158:	84 e0       	ldi	r24, 0x04	; 4
+ 15a:	91 50       	subi	r25, 0x01	; 1
+ 15c:	20 40       	sbci	r18, 0x00	; 0
+ 15e:	80 40       	sbci	r24, 0x00	; 0
+ 160:	e1 f7       	brne	.-8      	; 0x15a <play_melody+0x50>
+ 162:	00 c0       	rjmp	.+0      	; 0x164 <play_melody+0x5a>
+ 164:	00 00       	nop
+
+void play_melody(void) {
+	uint16_t melody[] = {262, 294, 330, 349};  // C4, D4, E4, F4
+	uint16_t duration[] = {300, 300, 300, 300};
+
+	for (int i = 0; i < 4; i++) {
+ 166:	0f 5f       	subi	r16, 0xFF	; 255
+ 168:	1f 4f       	sbci	r17, 0xFF	; 255
+ 16a:	04 30       	cpi	r16, 0x04	; 4
+ 16c:	11 05       	cpc	r17, r1
+ 16e:	2c f3       	brlt	.-54     	; 0x13a <play_melody+0x30>
+		play_tone(melody[i]);
+		_delay_ms(100);  // Short pause between notes
+	}
+}
+ 170:	28 96       	adiw	r28, 0x08	; 8
+ 172:	0f b6       	in	r0, 0x3f	; 63
+ 174:	f8 94       	cli
+ 176:	de bf       	out	0x3e, r29	; 62
+ 178:	0f be       	out	0x3f, r0	; 63
+ 17a:	cd bf       	out	0x3d, r28	; 61
+ 17c:	df 91       	pop	r29
+ 17e:	cf 91       	pop	r28
+ 180:	1f 91       	pop	r17
+ 182:	0f 91       	pop	r16
+ 184:	08 95       	ret
+
+00000186 <TWI_init>:
+static char twi_receive_data[BUFFER_SIZE];
+static uint8_t twi_index = 0;
+
+void TWI_init() {
+	// Set slave address (7-bit address left-shifted, general call disabled)
+	TWAR = (SLAVE_ADDRESS << 1);
+ 186:	8e ea       	ldi	r24, 0xAE	; 174
+ 188:	80 93 ba 00 	sts	0x00BA, r24	; 0x8000ba <__TEXT_REGION_LENGTH__+0x7f80ba>
+
+	// Enable TWI and ACK
+	TWCR = (1 << TWEN) | (1 << TWEA);
+ 18c:	84 e4       	ldi	r24, 0x44	; 68
+ 18e:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
+ 192:	08 95       	ret
+
+00000194 <TWI_listen>:
+void TWI_listen() {
+	uint8_t status;
+
+	while (1) {
+		// Wait for TWI interrupt flag
+		while (!(TWCR & (1 << TWINT))) {
+ 194:	80 91 bc 00 	lds	r24, 0x00BC	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
+ 198:	88 23       	and	r24, r24
+ 19a:	e4 f7       	brge	.-8      	; 0x194 <TWI_listen>
+			;
+		}
+
+		// Read status and mask prescaler bits
+		status = TWSR & 0xF8;
+ 19c:	80 91 b9 00 	lds	r24, 0x00B9	; 0x8000b9 <__TEXT_REGION_LENGTH__+0x7f80b9>
+ 1a0:	88 7f       	andi	r24, 0xF8	; 248
+
+		// Re-enable TWI, ACK, clear interrupt
+		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN);
+ 1a2:	94 ec       	ldi	r25, 0xC4	; 196
+ 1a4:	90 93 bc 00 	sts	0x00BC, r25	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
+
+		if ((status == 0x80) || (status == 0x90)) {
+ 1a8:	80 38       	cpi	r24, 0x80	; 128
+ 1aa:	11 f0       	breq	.+4      	; 0x1b0 <TWI_listen+0x1c>
+ 1ac:	80 39       	cpi	r24, 0x90	; 144
+ 1ae:	79 f4       	brne	.+30     	; 0x1ce <TWI_listen+0x3a>
+			// Data received and ACK returned
+			if (twi_index < BUFFER_SIZE - 1) {
+ 1b0:	e0 91 2a 01 	lds	r30, 0x012A	; 0x80012a <__data_end>
+ 1b4:	e3 31       	cpi	r30, 0x13	; 19
+ 1b6:	70 f7       	brcc	.-36     	; 0x194 <TWI_listen>
+				twi_receive_data[twi_index++] = TWDR;
+ 1b8:	81 e0       	ldi	r24, 0x01	; 1
+ 1ba:	8e 0f       	add	r24, r30
+ 1bc:	80 93 2a 01 	sts	0x012A, r24	; 0x80012a <__data_end>
+ 1c0:	f0 e0       	ldi	r31, 0x00	; 0
+ 1c2:	80 91 bb 00 	lds	r24, 0x00BB	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7f80bb>
+ 1c6:	e5 5d       	subi	r30, 0xD5	; 213
+ 1c8:	fe 4f       	sbci	r31, 0xFE	; 254
+ 1ca:	80 83       	st	Z, r24
+ 1cc:	e3 cf       	rjmp	.-58     	; 0x194 <TWI_listen>
+			}
+			} else if ((status == 0x88) || (status == 0x98)) {
+ 1ce:	88 38       	cpi	r24, 0x88	; 136
+ 1d0:	11 f0       	breq	.+4      	; 0x1d6 <TWI_listen+0x42>
+ 1d2:	88 39       	cpi	r24, 0x98	; 152
+ 1d4:	79 f4       	brne	.+30     	; 0x1f4 <TWI_listen+0x60>
+			// Data received and NACK returned
+			if (twi_index < BUFFER_SIZE - 1) {
+ 1d6:	e0 91 2a 01 	lds	r30, 0x012A	; 0x80012a <__data_end>
+ 1da:	e3 31       	cpi	r30, 0x13	; 19
+ 1dc:	d8 f6       	brcc	.-74     	; 0x194 <TWI_listen>
+				twi_receive_data[twi_index++] = TWDR;
+ 1de:	81 e0       	ldi	r24, 0x01	; 1
+ 1e0:	8e 0f       	add	r24, r30
+ 1e2:	80 93 2a 01 	sts	0x012A, r24	; 0x80012a <__data_end>
+ 1e6:	f0 e0       	ldi	r31, 0x00	; 0
+ 1e8:	80 91 bb 00 	lds	r24, 0x00BB	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7f80bb>
+ 1ec:	e5 5d       	subi	r30, 0xD5	; 213
+ 1ee:	fe 4f       	sbci	r31, 0xFE	; 254
+ 1f0:	80 83       	st	Z, r24
+ 1f2:	d0 cf       	rjmp	.-96     	; 0x194 <TWI_listen>
+			}
+			} else if (status == 0xA0) {
+ 1f4:	80 3a       	cpi	r24, 0xA0	; 160
+ 1f6:	71 f6       	brne	.-100    	; 0x194 <TWI_listen>
+			// Stop or repeated start condition
+			twi_receive_data[twi_index] = '\0';  // Null-terminate
+ 1f8:	e0 91 2a 01 	lds	r30, 0x012A	; 0x80012a <__data_end>
+ 1fc:	f0 e0       	ldi	r31, 0x00	; 0
+ 1fe:	e5 5d       	subi	r30, 0xD5	; 213
+ 200:	fe 4f       	sbci	r31, 0xFE	; 254
+ 202:	10 82       	st	Z, r1
+			twi_index = 0;
+ 204:	10 92 2a 01 	sts	0x012A, r1	; 0x80012a <__data_end>
+ 208:	08 95       	ret
+
+0000020a <TWI_get_data>:
+	}
+}
+
+char* TWI_get_data() {
+	return twi_receive_data;
+}
+ 20a:	8b e2       	ldi	r24, 0x2B	; 43
+ 20c:	91 e0       	ldi	r25, 0x01	; 1
+ 20e:	08 95       	ret
+
+00000210 <set_movement_led>:
+	set_movement_led(0);
+	set_door_led(true);
+}
+
+void set_movement_led(bool state) {
+	if (state)
+ 210:	88 23       	and	r24, r24
+ 212:	21 f0       	breq	.+8      	; 0x21c <set_movement_led+0xc>
+	PORTB |= (1 << MOVEMENT_LED_PIN);
+ 214:	85 b1       	in	r24, 0x05	; 5
+ 216:	81 60       	ori	r24, 0x01	; 1
+ 218:	85 b9       	out	0x05, r24	; 5
+ 21a:	08 95       	ret
+	else
+	PORTB &= ~(1 << MOVEMENT_LED_PIN);
+ 21c:	85 b1       	in	r24, 0x05	; 5
+ 21e:	8e 7f       	andi	r24, 0xFE	; 254
+ 220:	85 b9       	out	0x05, r24	; 5
+ 222:	08 95       	ret
+
+00000224 <set_door_led>:
+}
+
+void set_door_led(bool state) {
+	if (state)
+ 224:	88 23       	and	r24, r24
+ 226:	21 f0       	breq	.+8      	; 0x230 <set_door_led+0xc>
+	PORTB |= (1 << DOOR_LED_PIN);
+ 228:	85 b1       	in	r24, 0x05	; 5
+ 22a:	82 60       	ori	r24, 0x02	; 2
+ 22c:	85 b9       	out	0x05, r24	; 5
+ 22e:	08 95       	ret
+	else
+	PORTB &= ~(1 << DOOR_LED_PIN);
+ 230:	85 b1       	in	r24, 0x05	; 5
+ 232:	8d 7f       	andi	r24, 0xFD	; 253
+ 234:	85 b9       	out	0x05, r24	; 5
+ 236:	08 95       	ret
+
+00000238 <led_init>:
+#define LED_BLINK_INTERVAL 1000  // Set a constant interval for blinking
+
+// Led controller can be used to turn the movement and door opening LEDs on and off. It also has blink function for emergencies.
+
+void led_init(void) {
+	DDRB |= (1 << MOVEMENT_LED_PIN) | (1 << DOOR_LED_PIN);
+ 238:	84 b1       	in	r24, 0x04	; 4
+ 23a:	83 60       	ori	r24, 0x03	; 3
+ 23c:	84 b9       	out	0x04, r24	; 4
+	set_movement_led(0);
+ 23e:	80 e0       	ldi	r24, 0x00	; 0
+ 240:	0e 94 08 01 	call	0x210	; 0x210 <set_movement_led>
+	set_door_led(true);
+ 244:	81 e0       	ldi	r24, 0x01	; 1
+ 246:	0e 94 12 01 	call	0x224	; 0x224 <set_door_led>
+ 24a:	08 95       	ret
+
+0000024c <blink_movement_led>:
+	PORTB &= ~(1 << DOOR_LED_PIN);
+}
+
+
+void blink_movement_led() {
+	for (uint8_t i = 0; i < 3; i++) {
+ 24c:	20 e0       	ldi	r18, 0x00	; 0
+ 24e:	1a c0       	rjmp	.+52     	; 0x284 <blink_movement_led+0x38>
+		PORTB ^= (1 << MOVEMENT_LED_PIN);
+ 250:	95 b1       	in	r25, 0x05	; 5
+ 252:	81 e0       	ldi	r24, 0x01	; 1
+ 254:	98 27       	eor	r25, r24
+ 256:	95 b9       	out	0x05, r25	; 5
+ 258:	3f ef       	ldi	r19, 0xFF	; 255
+ 25a:	43 ed       	ldi	r20, 0xD3	; 211
+ 25c:	90 e3       	ldi	r25, 0x30	; 48
+ 25e:	31 50       	subi	r19, 0x01	; 1
+ 260:	40 40       	sbci	r20, 0x00	; 0
+ 262:	90 40       	sbci	r25, 0x00	; 0
+ 264:	e1 f7       	brne	.-8      	; 0x25e <blink_movement_led+0x12>
+ 266:	00 c0       	rjmp	.+0      	; 0x268 <blink_movement_led+0x1c>
+ 268:	00 00       	nop
+		_delay_ms(LED_BLINK_INTERVAL);
+		PORTB ^= (1 << MOVEMENT_LED_PIN);
+ 26a:	95 b1       	in	r25, 0x05	; 5
+ 26c:	89 27       	eor	r24, r25
+ 26e:	85 b9       	out	0x05, r24	; 5
+ 270:	3f ef       	ldi	r19, 0xFF	; 255
+ 272:	43 ed       	ldi	r20, 0xD3	; 211
+ 274:	80 e3       	ldi	r24, 0x30	; 48
+ 276:	31 50       	subi	r19, 0x01	; 1
+ 278:	40 40       	sbci	r20, 0x00	; 0
+ 27a:	80 40       	sbci	r24, 0x00	; 0
+ 27c:	e1 f7       	brne	.-8      	; 0x276 <blink_movement_led+0x2a>
+ 27e:	00 c0       	rjmp	.+0      	; 0x280 <blink_movement_led+0x34>
+ 280:	00 00       	nop
+	PORTB &= ~(1 << DOOR_LED_PIN);
+}
+
+
+void blink_movement_led() {
+	for (uint8_t i = 0; i < 3; i++) {
+ 282:	2f 5f       	subi	r18, 0xFF	; 255
+ 284:	23 30       	cpi	r18, 0x03	; 3
+ 286:	20 f3       	brcs	.-56     	; 0x250 <blink_movement_led+0x4>
+		PORTB ^= (1 << MOVEMENT_LED_PIN);
+		_delay_ms(LED_BLINK_INTERVAL);
+		PORTB ^= (1 << MOVEMENT_LED_PIN);
+		_delay_ms(LED_BLINK_INTERVAL);
+	}
+}
+ 288:	08 95       	ret
+
+0000028a <main>:
+#include <util/delay.h>
+#include <avr/interrupt.h>
+#include <string.h>
+
+int main(void) {
+	TWI_init();
+ 28a:	0e 94 c3 00 	call	0x186	; 0x186 <TWI_init>
+	buzzer_init();
+ 28e:	0e 94 53 00 	call	0xa6	; 0xa6 <buzzer_init>
+	led_init();
+ 292:	0e 94 1c 01 	call	0x238	; 0x238 <led_init>
+
+	while (1) {
+		// Wait for TWI message from master
+		TWI_listen();
+ 296:	0e 94 ca 00 	call	0x194	; 0x194 <TWI_listen>
+		char* message = TWI_get_data();
+ 29a:	0e 94 05 01 	call	0x20a	; 0x20a <TWI_get_data>
+ 29e:	ec 01       	movw	r28, r24
+
+		// Handle door control
+		if (strcmp(message, "open") == 0) {
+ 2a0:	68 e0       	ldi	r22, 0x08	; 8
+ 2a2:	71 e0       	ldi	r23, 0x01	; 1
+ 2a4:	0e 94 b8 01 	call	0x370	; 0x370 <strcmp>
+ 2a8:	89 2b       	or	r24, r25
+ 2aa:	21 f4       	brne	.+8      	; 0x2b4 <main+0x2a>
+			set_door_led(true);
+ 2ac:	81 e0       	ldi	r24, 0x01	; 1
+ 2ae:	0e 94 12 01 	call	0x224	; 0x224 <set_door_led>
+ 2b2:	32 c0       	rjmp	.+100    	; 0x318 <main+0x8e>
+			} else if (strcmp(message, "close") == 0) {
+ 2b4:	6d e0       	ldi	r22, 0x0D	; 13
+ 2b6:	71 e0       	ldi	r23, 0x01	; 1
+ 2b8:	ce 01       	movw	r24, r28
+ 2ba:	0e 94 b8 01 	call	0x370	; 0x370 <strcmp>
+ 2be:	89 2b       	or	r24, r25
+ 2c0:	21 f4       	brne	.+8      	; 0x2ca <main+0x40>
+			set_door_led(false);
+ 2c2:	80 e0       	ldi	r24, 0x00	; 0
+ 2c4:	0e 94 12 01 	call	0x224	; 0x224 <set_door_led>
+ 2c8:	27 c0       	rjmp	.+78     	; 0x318 <main+0x8e>
+		}
+
+		// Emergency handling
+		else if (strcmp(message, "emergency") == 0) {
+ 2ca:	63 e1       	ldi	r22, 0x13	; 19
+ 2cc:	71 e0       	ldi	r23, 0x01	; 1
+ 2ce:	ce 01       	movw	r24, r28
+ 2d0:	0e 94 b8 01 	call	0x370	; 0x370 <strcmp>
+ 2d4:	89 2b       	or	r24, r25
+ 2d6:	41 f4       	brne	.+16     	; 0x2e8 <main+0x5e>
+			blink_movement_led();  // Blink 3x
+ 2d8:	0e 94 26 01 	call	0x24c	; 0x24c <blink_movement_led>
+			set_door_led(true);
+ 2dc:	81 e0       	ldi	r24, 0x01	; 1
+ 2de:	0e 94 12 01 	call	0x224	; 0x224 <set_door_led>
+			play_melody();
+ 2e2:	0e 94 85 00 	call	0x10a	; 0x10a <play_melody>
+ 2e6:	18 c0       	rjmp	.+48     	; 0x318 <main+0x8e>
+			// Response to master is not yet implemented in TWI_send_data
+		}
+
+		// Fault handling
+		else if (strcmp(message, "fault") == 0) {
+ 2e8:	6d e1       	ldi	r22, 0x1D	; 29
+ 2ea:	71 e0       	ldi	r23, 0x01	; 1
+ 2ec:	ce 01       	movw	r24, r28
+ 2ee:	0e 94 b8 01 	call	0x370	; 0x370 <strcmp>
+ 2f2:	89 2b       	or	r24, r25
+ 2f4:	19 f4       	brne	.+6      	; 0x2fc <main+0x72>
+			blink_movement_led();
+ 2f6:	0e 94 26 01 	call	0x24c	; 0x24c <blink_movement_led>
+ 2fa:	0e c0       	rjmp	.+28     	; 0x318 <main+0x8e>
+		}
+
+		// Elevator movement
+		else if (strcmp(message, "moving") == 0) {
+ 2fc:	63 e2       	ldi	r22, 0x23	; 35
+ 2fe:	71 e0       	ldi	r23, 0x01	; 1
+ 300:	ce 01       	movw	r24, r28
+ 302:	0e 94 b8 01 	call	0x370	; 0x370 <strcmp>
+ 306:	89 2b       	or	r24, r25
+ 308:	21 f4       	brne	.+8      	; 0x312 <main+0x88>
+			set_movement_led(true);
+ 30a:	81 e0       	ldi	r24, 0x01	; 1
+ 30c:	0e 94 08 01 	call	0x210	; 0x210 <set_movement_led>
+ 310:	03 c0       	rjmp	.+6      	; 0x318 <main+0x8e>
+			} else {
+			set_movement_led(false);
+ 312:	80 e0       	ldi	r24, 0x00	; 0
+ 314:	0e 94 08 01 	call	0x210	; 0x210 <set_movement_led>
+ 318:	2f ef       	ldi	r18, 0xFF	; 255
+ 31a:	81 ee       	ldi	r24, 0xE1	; 225
+ 31c:	94 e0       	ldi	r25, 0x04	; 4
+ 31e:	21 50       	subi	r18, 0x01	; 1
+ 320:	80 40       	sbci	r24, 0x00	; 0
+ 322:	90 40       	sbci	r25, 0x00	; 0
+ 324:	e1 f7       	brne	.-8      	; 0x31e <main+0x94>
+ 326:	00 c0       	rjmp	.+0      	; 0x328 <main+0x9e>
+ 328:	00 00       	nop
+ 32a:	b5 cf       	rjmp	.-150    	; 0x296 <main+0xc>
+
+0000032c <__udivmodsi4>:
+ 32c:	a1 e2       	ldi	r26, 0x21	; 33
+ 32e:	1a 2e       	mov	r1, r26
+ 330:	aa 1b       	sub	r26, r26
+ 332:	bb 1b       	sub	r27, r27
+ 334:	fd 01       	movw	r30, r26
+ 336:	0d c0       	rjmp	.+26     	; 0x352 <__udivmodsi4_ep>
+
+00000338 <__udivmodsi4_loop>:
+ 338:	aa 1f       	adc	r26, r26
+ 33a:	bb 1f       	adc	r27, r27
+ 33c:	ee 1f       	adc	r30, r30
+ 33e:	ff 1f       	adc	r31, r31
+ 340:	a2 17       	cp	r26, r18
+ 342:	b3 07       	cpc	r27, r19
+ 344:	e4 07       	cpc	r30, r20
+ 346:	f5 07       	cpc	r31, r21
+ 348:	20 f0       	brcs	.+8      	; 0x352 <__udivmodsi4_ep>
+ 34a:	a2 1b       	sub	r26, r18
+ 34c:	b3 0b       	sbc	r27, r19
+ 34e:	e4 0b       	sbc	r30, r20
+ 350:	f5 0b       	sbc	r31, r21
+
+00000352 <__udivmodsi4_ep>:
+ 352:	66 1f       	adc	r22, r22
+ 354:	77 1f       	adc	r23, r23
+ 356:	88 1f       	adc	r24, r24
+ 358:	99 1f       	adc	r25, r25
+ 35a:	1a 94       	dec	r1
+ 35c:	69 f7       	brne	.-38     	; 0x338 <__udivmodsi4_loop>
+ 35e:	60 95       	com	r22
+ 360:	70 95       	com	r23
+ 362:	80 95       	com	r24
+ 364:	90 95       	com	r25
+ 366:	9b 01       	movw	r18, r22
+ 368:	ac 01       	movw	r20, r24
+ 36a:	bd 01       	movw	r22, r26
+ 36c:	cf 01       	movw	r24, r30
+ 36e:	08 95       	ret
+
+00000370 <strcmp>:
+ 370:	fb 01       	movw	r30, r22
+ 372:	dc 01       	movw	r26, r24
+ 374:	8d 91       	ld	r24, X+
+ 376:	01 90       	ld	r0, Z+
+ 378:	80 19       	sub	r24, r0
+ 37a:	01 10       	cpse	r0, r1
+ 37c:	d9 f3       	breq	.-10     	; 0x374 <strcmp+0x4>
+ 37e:	99 0b       	sbc	r25, r25
+ 380:	08 95       	ret
+
+00000382 <_exit>:
+ 382:	f8 94       	cli
+
+00000384 <__stop_program>:
+ 384:	ff cf       	rjmp	.-2      	; 0x384 <__stop_program>

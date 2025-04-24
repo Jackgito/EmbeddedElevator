@@ -30,15 +30,15 @@
     <EraseKey />
     <AsfFrameworkConfig>
       <framework-data xmlns="">
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -155,13 +155,10 @@
     <Compile Include="keypad_controller\stdutils.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lcd_controller\lcd.c">
+    <Compile Include="lcd_controller_MEGA\lcd.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lcd_controller\lcd.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="led_controller\led_controller.c">
+    <Compile Include="lcd_controller_MEGA\lcd.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="led_controller\led_controller.h">
@@ -170,14 +167,21 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="uart_debug\uart_debug.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uart_debug\uart_debug.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="communication\" />
     <Folder Include="elevator_controller" />
     <Folder Include="keypad_controller" />
     <Folder Include="led_controller" />
-    <Folder Include="lcd_controller" />
+    <Folder Include="lcd_controller_MEGA" />
     <Folder Include="isr_controller" />
+    <Folder Include="uart_debug" />
   </ItemGroup>
   <ItemGroup>
     <None Include="keypad_controller\mega_keypad_model.pdf">

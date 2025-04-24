@@ -1,12 +1,14 @@
 #ifndef ISR_CONTROLLER_H
 #define ISR_CONTROLLER_H
 
-#include <avr/io.h>
 #include <avr/interrupt.h>
 
-void isr_init(void);
-void enable_timer_interrupt(uint16_t interval_ms);
-void enable_external_interrupt(uint8_t pin);
-void disable_timer_interrupt(void);
+#define EMERGENCY_BUTTON_PIN 2
 
-#endif
+// Initializes global interrupt system
+void isr_init(void);
+
+// Enables external interrupt on PD3 (INT1) for emergency button
+void enable_external_interrupt(uint8_t);
+
+#endif // ISR_CONTROLLER_H

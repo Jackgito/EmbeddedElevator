@@ -1,39 +1,53 @@
-#include "communication.h"
-#include "buzzer_controller.h"
+#define F_CPU 16000000UL
+
+#include "communications/communication_slave.h"
+#include "buzzer_controller/buzzer_controller.h"
+#include "led_controller/led_controller.h"
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-
-// Define the emergency button pin
-#define EMERGENCY_BUTTON_PIN PD2
-
-uint8_t isEmergencyButtonPressed(void) {
-    return !(PIND & (1 << EMERGENCY_BUTTON_PIN));
-}
+#include <string.h>
 
 int main(void) {
-    // Initialize TWI as master (Mega will act as slave)
-    TWI_init();
-    
-    // Initialize the buzzer
-    buzzer_init();
-    
-    // Main loop
-    while (1) {
-        // Continuously check for received data
-        TWI_receive();
-        
-        if (isEmergencyButtonPressed()) {
-            // Send emergency message over TWI
-            TWI_send_data("Start emergency"); // Sends Button press data to master through TWI
-            
-            // Activate the buzzer (play melody)
-            play_melody();
-            
-            // Optional: Add debounce delay after button press
-            _delay_ms(500);
-        }
-    }
+	TWI_init();
+	buzzer_init();
+	led_init();
 
-    return 0;
+	while (1) {
+		// Wait for TWI message from master
+		TWI_listen();
+		char* message = TWI_get_data();
+
+		// Handle door control
+		if (strcmp(message, "open") == 0) {
+			set_door_led(true);
+			} else if (strcmp(message, "close") == 0) {
+			set_door_led(false);
+		}
+
+		// Emergency handling
+		else if (strcmp(message, "emergency") == 0) {
+			blink_movement_led();  // Blink 3x
+			set_door_led(true);
+			play_melody();
+			// Response to master is not yet implemented in TWI_send_data
+		}
+
+		// Fault handling
+		else if (strcmp(message, "fault") == 0) {
+			blink_movement_led();
+		}
+
+		// Elevator movement
+		else if (strcmp(message, "moving") == 0) {
+			set_movement_led(true);
+			} else {
+			set_movement_led(false);
+		}
+
+		_delay_ms(100);
+	}
+
+	return 0;
 }
