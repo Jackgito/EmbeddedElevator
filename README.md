@@ -42,11 +42,10 @@ This project is the final coursework for the **Introduction to Embedded Systems*
 ## **Group Members & Responsibilities**
 | Name       | Responsibility                         |
 |------------|----------------------------------|
-| **Aleksi**  | Elevator movement control      |
-| **Eliel**   | Emergency system & communication module |
-| **Jericho** | Report (excluding circuit diagram) |
-| **Juhani**  | Project codebase setup & live demonstration |
-| **Niklas**  | Circuit diagram |
+| **Aleksi**  | Circuit & report |
+| **Jericho** | Slave logic |
+| **Juhani**  | Project codebase setup, master logic & TWI communication |
+| **Niklas**  | Report |
 
 ## Image ##
 ![picture](https://github.com/user-attachments/assets/0866b3c5-1862-4b96-8c9d-32f67bfdc57b)
