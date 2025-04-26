@@ -5,7 +5,7 @@
 #include <util/delay.h>
 
 void buzzer_init(void);
-void play_melody(void);
+void play_emergency_melody(void);
 void play_chime(void);
 
 #endif

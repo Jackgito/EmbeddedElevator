@@ -10,9 +10,11 @@
 #include "../communication/communication_master.h"
 
 #define MAX_FLOOR 99
-#define TIME_PER_FLOOR 500
+#define TIME_PER_FLOOR 400
 
+static volatile uint8_t emergency_handled = 0;
 static uint8_t current_floor = 0;
+static uint8_t target_floor = 0;
 
 typedef enum {
 	IDLE,
@@ -36,6 +38,7 @@ void elevator_reset_ui(void) {
 	lcd_puts("Choose floor:");
 	lcd_gotoxy(0, 1);
 	print("Choose floor");
+	emergency_handled = 0; // Allow emergency button to trigger again
 }
 
 void move_elevator(uint8_t floor) {
@@ -49,6 +52,7 @@ void move_elevator(uint8_t floor) {
 		return;
 	}
 
+	target_floor = floor;
 	current_state = MOVING;
 	display_floor(current_floor);
 
@@ -88,15 +92,21 @@ void close_door(void) {
 
 // This is called via ISR when button is pressed
 void emergency_stop(void) {
+	if (emergency_handled) {
+		return; // Already handled, ignore
+	}
+
+	emergency_handled = 1; // Lock emergency handler
+
 	current_state = EMERGENCY;
 	send_TWI_data("emergency");
 
 	lcd_clrscr();
 	lcd_puts("EMERGENCY");
 	print("EMERGENCY");
-
-	open_door();
-	close_door();
+	_delay_ms(4000);
+	open_door();  // open_door() will call close_door() automatically
+	
 }
 
 void handle_fault(void) {
@@ -127,27 +137,41 @@ void display_floor(uint8_t floor) {
 	switch (current_state) {
 		case IDLE:
 		state_str = "IDLE";
-		lcd_puts("State: IDLE");
+		lcd_puts("Choose floor:");
 		break;
-		case MOVING:
-		state_str = "MOVING";
-		lcd_puts("State: MOVING");
-		break;
+
+		case MOVING: {
+			state_str = "MOVING";
+
+			// Line 1: Show current floor
+			lcd_puts("Floor: ");
+			char current_str[4];
+			itoa(current_floor, current_str, 10);
+			lcd_puts(current_str);
+
+			// Line 2: Show target floor
+			lcd_gotoxy(0, 1);
+			lcd_puts("Target: ");
+			char target_str[4];
+			itoa(target_floor, target_str, 10); // Use a simple target_floor variable
+			lcd_puts(target_str);
+			break;
+		}
+
 		case DOOR_OPENING:
-		state_str = "OPENING";
-		lcd_puts("State: OPENING");
-		break;
 		case DOOR_CLOSING:
-		state_str = "CLOSING";
-		lcd_puts("State: CLOSING");
+		state_str = (current_state == DOOR_OPENING) ? "DOOR OPEN" : "DOOR CLOSED";
+		lcd_puts(state_str);
 		break;
+
 		case EMERGENCY:
 		state_str = "EMERGENCY";
-		lcd_puts("State: EMERGENCY");
+		lcd_puts("EMERGENCY");
 		break;
+
 		case FAULT:
 		state_str = "FAULT";
-		lcd_puts("State: FAULT");
+		lcd_puts("FAULT: Same floor");
 		break;
 	}
 

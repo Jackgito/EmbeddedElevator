@@ -1,54 +1,95 @@
-#include "buzzer_controller.h"
+#define F_CPU 16000000UL
 #include <avr/io.h>
+#include <util/delay.h>
 #include <avr/interrupt.h>
+#include "../led_controller/led_controller.h"
 
-ISR (TIMER1_COMPA_vect)
-{
+// Notes (frequencies in Hz)
+const uint16_t melody_notes[] = {
+200, 500, 600, 300, 420, 200, 600, 300, 50, 200, 500, 600, 300, 420, 200, 600
+};
 
-}
+#define BUZZER_PIN PB3
+
+const uint8_t note_count = sizeof(melody_notes) / sizeof(melody_notes[0]);
 
 void buzzer_init(void) {
-    /* Set up the ports and pins */
-    DDRB|= (1 << PB1); // OC1A pin 9
-    
-    /* Set up the 16-bit timer/counter1 */
-    TCNT1  = 0; //reset timer/counter register
-    TCCR1B = 0; //reset timer/counter control
-    TCCR1A |= (1 << 6); //set compare output mode to toggle OC1A
-    
-    /* Set up waveform generation mode*/
-    //In mode 9, the WGMn3 = 1 and WGMn0 = 1.
-    TCCR1A |= (1 << 0); //Normal port operation
-    TCCR1B |= (1 << 4); //Clear OCnA/OCnB/OCnC on compare match (set output to low level)
+	// Set PB3 (Pin 11, OC2A) as output
+	DDRB |= (1 << BUZZER_PIN);
 
-    /* Enable timer/counter compare match A interrupt */
-    TIMSK1 |= (1 << 1);
-    
-    /* Enable interrupts command */
-    sei();
+	// Reset Timer2
+	TCCR2A = 0;
+	TCCR2B = 0;
+	TCNT2 = 0;
+
+	// Toggle OC2A on Compare Match
+	TCCR2A |= (1 << COM2A0);
+
+	// CTC mode
+	TCCR2A |= (1 << WGM21);
+
+	// Prescaler will be set later
 }
 
-// Function to play a melody with 4 notes
-void play_melody(void) {
-    uint16_t melody[] = {7641, 6067, 5102, 3822}; // C6 1046.5 Hz, E6 1318.51 Hz, G6 1567.98 Hz, C7 2093 Hz
-    
-    for (int i = 0; i < 4; i++) {
-        TCCR1B |= (1 << 0); // Enable timer/counter1. Set prescaling to 1 (no prescaling)
-        OCR1A = melody[i];	// Set output frequency
-        _delay_ms(2000);
-    }
-    TCCR1B = 0; //reset timer/counter control
-    TCCR1B |= (1 << 4); //Clear OCnA/OCnB/OCnC on compare match (set output to low level)
+void set_buzzer_frequency(uint16_t frequency) {
+	if (frequency == 0) {
+		// Stop Timer2
+		TCCR2B &= ~((1 << CS22) | (1 << CS21) | (1 << CS20));
+		return;
+	}
+
+	// Use prescaler 64
+	TCCR2B &= ~((1 << CS22) | (1 << CS21) | (1 << CS20));
+	TCCR2B |= (1 << CS22); // prescaler = 64
+
+	// Calculate OCR2A value
+	uint16_t ocr = (F_CPU / (2UL * 64UL * frequency)) - 1;
+
+	if (ocr > 255) ocr = 255; // Limit to 8-bit max
+	OCR2A = (uint8_t)ocr;
 }
 
-// Function to play chime
+// Activates buzzer and blinks movement LED 3 times
+// This is done in same function so the actions can be done simultaneously
+void play_emergency_melody(void) {
+	for (uint8_t i = 0; i < note_count; i++) {
+		set_buzzer_frequency(melody_notes[i]);
+
+		// Every fourth note (i % 4 == 0) is longer (200ms), others are shorter (100ms)
+		if (i % 4 == 0) {
+			set_movement_led(true);
+			_delay_ms(200);
+			} else if  (i == note_count - 1) {
+			_delay_ms(500);
+		} else {
+			set_movement_led(false);
+			_delay_ms(100);
+		}
+
+		set_buzzer_frequency(0);  // Turn off the buzzer
+
+		// Small pause between notes
+		_delay_ms(50);
+	}
+	set_movement_led(false);
+}
+
+
+
+
+
 void play_chime(void) {
-    TCCR1B |= (1 << 0); // Enable timer/counter1. Set prescaling to 1 (no prescaling)
-    OCR1A = 5102;	// Set output frequency 1567.98 Hz (G6)
-    _delay_ms(5500);
-    TCCR1B |= (1 << 0); // Enable timer/counter1. Set prescaling to 1 (no prescaling)
-    OCR1A = 6428;	// Set output frequency 1244.51 Hz (D6#)
-    _delay_ms(12000);
-    TCCR1B = 0; //reset timer/counter control
-    TCCR1B |= (1 << 4); //Clear OCnA/OCnB/OCnC on compare match (set output to low level)
+	set_buzzer_frequency(1568);
+
+	for (uint16_t i = 0; i < 5500; i++) {
+		_delay_ms(1);
+	}
+
+	set_buzzer_frequency(1245);
+
+	for (uint16_t i = 0; i < 12000; i++) {
+		_delay_ms(1);
+	}
+
+	set_buzzer_frequency(0);
 }

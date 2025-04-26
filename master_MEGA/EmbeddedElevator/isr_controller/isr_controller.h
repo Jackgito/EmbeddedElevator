@@ -3,8 +3,6 @@
 
 #include <avr/interrupt.h>
 
-#define EMERGENCY_BUTTON_PIN 2
-
 // Initializes global interrupt system
 void isr_init(void);
 

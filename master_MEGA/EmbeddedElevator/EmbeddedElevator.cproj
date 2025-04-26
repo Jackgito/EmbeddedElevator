@@ -161,9 +161,6 @@
     <Compile Include="lcd_controller_MEGA\lcd.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="led_controller\led_controller.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -178,7 +175,6 @@
     <Folder Include="communication\" />
     <Folder Include="elevator_controller" />
     <Folder Include="keypad_controller" />
-    <Folder Include="led_controller" />
     <Folder Include="lcd_controller_MEGA" />
     <Folder Include="isr_controller" />
     <Folder Include="uart_debug" />

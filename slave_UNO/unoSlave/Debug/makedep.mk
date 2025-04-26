@@ -10,3 +10,5 @@ led_controller\led_controller.c
 
 main.c
 
+uart_debug\uart_debug.c
+

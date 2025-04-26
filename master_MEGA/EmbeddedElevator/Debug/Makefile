@@ -36,7 +36,6 @@ SUBDIRS :=  \
 ../communication/ \
 ../elevator_controller \
 ../keypad_controller \
-../led_controller \
 ../lcd_controller_MEGA \
 ../isr_controller \
 ../uart_debug

@@ -4,6 +4,8 @@
 #include "../keypad_controller/keypad.h"
 #include "../uart_debug/uart_debug.h"
 
+#define EMERGENCY_BUTTON_PIN PE4
+
 /*
  * ISR (Interrupt Service Routine) controller improves responsiveness by handling events immediately,
  * allowing the code to temporarily pause its current execution and jump to a specific task when an interrupt occurs.
@@ -14,16 +16,14 @@ void isr_init(void) {
 	sei(); // Enable global interrupts
 }
 
-// Enable external interrupt on INT1 (PD3)
 void enable_external_interrupt(uint8_t pin) {
-	print("ISR enabled");
 	if (pin == EMERGENCY_BUTTON_PIN) {
-		EICRA |= (1 << ISC01);  // Trigger on falling edge
-		EIMSK |= (1 << INT0);   // Enable INT0
+		EICRB |= (1 << ISC41);  // Falling edge trigger for INT4
+		EIMSK |= (1 << INT4);   // Enable INT4
 	}
 }
 
 // ISR for Emergency Stop Button
-ISR(INT0_vect) {
+ISR(INT4_vect) {
 	emergency_stop();
 }

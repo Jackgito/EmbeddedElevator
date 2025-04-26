@@ -23,7 +23,7 @@ void TWI_start() {
 	uint16_t elapsed = 0;
     while (!(TWCR & (1 << TWINT))) {
 		_delay_ms(1);
-		if (++elapsed > 1000) {  // Wait second
+		if (++elapsed > 2000) {  // Wait 2 seconds
 			print("TWI write timeout!");
 			break;
 		}
@@ -43,7 +43,7 @@ void TWI_write(uint8_t data) {
 	uint16_t elapsed = 0;
 	while (!(TWCR & (1 << TWINT))) {
 		_delay_ms(1);
-		if (++elapsed > 500) {  // Wait half a second
+		if (++elapsed > 2000) {  // Wait 2 seconds
 			print("TWI write timeout!");
 			break;
 		}

@@ -3,6 +3,7 @@
 #include "communications/communication_slave.h"
 #include "buzzer_controller/buzzer_controller.h"
 #include "led_controller/led_controller.h"
+#include "uart_debug/uart_debug.h"
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -10,6 +11,7 @@
 #include <string.h>
 
 int main(void) {
+	uart_init(103); // UART for debugging
 	TWI_init();
 	buzzer_init();
 	led_init();
@@ -18,20 +20,21 @@ int main(void) {
 		// Wait for TWI message from master
 		TWI_listen();
 		char* message = TWI_get_data();
+		//print(message);
 
 		// Handle door control
-		if (strcmp(message, "open") == 0) {
+		if (strcmp(message, "open_door") == 0) {
+			set_movement_led(false);
 			set_door_led(true);
-			} else if (strcmp(message, "close") == 0) {
+		
+		} else if (strcmp(message, "close_door") == 0) {
+			set_movement_led(false);
 			set_door_led(false);
 		}
 
 		// Emergency handling
 		else if (strcmp(message, "emergency") == 0) {
-			blink_movement_led();  // Blink 3x
-			set_door_led(true);
-			play_melody();
-			// Response to master is not yet implemented in TWI_send_data
+			play_emergency_melody(); // Activates buzzer and blinks movement LED 3 times
 		}
 
 		// Fault handling
@@ -42,12 +45,9 @@ int main(void) {
 		// Elevator movement
 		else if (strcmp(message, "moving") == 0) {
 			set_movement_led(true);
-			} else {
-			set_movement_led(false);
+			set_door_led(false);
 		}
-
 		_delay_ms(100);
 	}
-
 	return 0;
 }
