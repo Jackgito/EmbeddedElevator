@@ -10,7 +10,7 @@
 #include "../communication/communication_master.h"
 
 #define MAX_FLOOR 99
-#define TIME_PER_FLOOR 400
+#define TIME_PER_FLOOR 400 // Time it takes for elevator to move 1 floor
 
 static volatile uint8_t emergency_handled = 0;
 static uint8_t current_floor = 0;
@@ -38,10 +38,12 @@ void elevator_reset_ui(void) {
 	lcd_puts("Choose floor:");
 	lcd_gotoxy(0, 1);
 	print("Choose floor");
-	emergency_handled = 0; // Allow emergency button to trigger again
 }
 
+// Handles elevator movement between floors with regular floor update display.
+// Movement can be interrupted if an emergency is triggered.
 void move_elevator(uint8_t floor) {
+	
 	printf("Current floor: %d\n", current_floor);
 	printf("Target floor: %d\n", floor);
 	
@@ -57,11 +59,16 @@ void move_elevator(uint8_t floor) {
 	display_floor(current_floor);
 
 	while (current_floor != floor) {
+		
+		if (emergency_handled == 1) { // Stop moving after emergency
+			emergency_handled = 0;
+			return;
+		}
+		
 		current_floor += (floor > current_floor) ? 1 : -1;
 		display_floor(current_floor);
 		_delay_ms(TIME_PER_FLOOR);
 	}
-
 	open_door();
 }
 
@@ -96,7 +103,7 @@ void emergency_stop(void) {
 		return; // Already handled, ignore
 	}
 
-	emergency_handled = 1; // Lock emergency handler
+	emergency_handled = 1; // Stop multiple emergency triggers
 
 	current_state = EMERGENCY;
 	send_TWI_data("emergency");
@@ -106,7 +113,7 @@ void emergency_stop(void) {
 	print("EMERGENCY");
 	_delay_ms(4000);
 	open_door();  // open_door() will call close_door() automatically
-	
+	current_state = IDLE;
 }
 
 void handle_fault(void) {

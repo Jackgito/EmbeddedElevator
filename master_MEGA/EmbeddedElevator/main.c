@@ -28,7 +28,6 @@ int main(void) {
 	setup();
 	uart_init(103); // UART for debug
 	lcd_clrscr();
-	lcd_puts("Hello world");
 	KEYPAD_Init();
 	TWI_init();
 	
@@ -80,9 +79,14 @@ int main(void) {
 			lcd_puts("              ");  // Clear line
 			lcd_gotoxy(0, 1);
 		} else { // Reset input
+			lcd_clrscr();
+			lcd_puts("Invalid floor!");
 			print("No such floor exists. Floor selection has been reset.");
 			buffer_index = 0;
 			input_buffer[0] = '\0';
+			_delay_ms(1500);
+			lcd_clrscr();
+			lcd_puts("Choose floor: ");
 		}
 	}
 }
