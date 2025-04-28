@@ -13,21 +13,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00001598  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000001e8  00000000  00000000  000015d8  2**0
+  5 .debug_aranges 000001f0  00000000  00000000  000015d8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00002a8c  00000000  00000000  000017c0  2**0
+  6 .debug_info   00002a7f  00000000  00000000  000017c8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00001644  00000000  00000000  0000424c  2**0
+  7 .debug_abbrev 0000165c  00000000  00000000  00004247  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000175b  00000000  00000000  00005890  2**0
+  8 .debug_line   00001777  00000000  00000000  000058a3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000042c  00000000  00000000  00006fec  2**2
+  9 .debug_frame  0000043c  00000000  00000000  0000701c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000a3c  00000000  00000000  00007418  2**0
+ 10 .debug_str    00000a42  00000000  00000000  00007458  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000125c  00000000  00000000  00007e54  2**0
+ 11 .debug_loc    00001214  00000000  00000000  00007e9a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000178  00000000  00000000  000090b0  2**0
+ 12 .debug_ranges 00000180  00000000  00000000  000090ae  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -306,7 +306,7 @@ Disassembly of section .text:
      208:	aa 36       	cpi	r26, 0x6A	; 106
      20a:	b2 07       	cpc	r27, r18
      20c:	e1 f7       	brne	.-8      	; 0x206 <.do_clear_bss_loop>
-     20e:	01 d4       	rcall	.+2050   	; 0xa12 <main>
+     20e:	0b d4       	rcall	.+2070   	; 0xa26 <main>
      210:	0c 94 21 09 	jmp	0x1242	; 0x1242 <_exit>
 
 00000214 <__bad_interrupt>:
@@ -1859,51 +1859,55 @@ void lcd_init(uint8_t dispAttr)
      a0e:	cf 91       	pop	r28
      a10:	08 95       	ret
 
-00000a12 <main>:
-	return pressed;
+00000a12 <setup>:
+#include "communication/communication_master.h"
+
+#define MAX_FLOOR 99
+
+void setup() {
+	lcd_init(LCD_DISP_ON);// initialize the LCD
+     a12:	8c e0       	ldi	r24, 0x0C	; 12
+     a14:	b5 df       	rcall	.-150    	; 0x980 <lcd_init>
+	KEYPAD_Init(); //initialize the keypad
+     a16:	4c de       	rcall	.-872    	; 0x6b0 <KEYPAD_Init>
+     a18:	8d b1       	in	r24, 0x0d	; 13
+	
+	// Set pin as input and enable internal pull-up to make ISR emergency system work
+	DDRE &= ~(1 << 4);    // Set PE4 as input
+     a1a:	8f 7e       	andi	r24, 0xEF	; 239
+     a1c:	8d b9       	out	0x0d, r24	; 13
+     a1e:	8e b1       	in	r24, 0x0e	; 14
+	PORTE |= (1 << 4);    // Enable pull-up resistor on PE4
+     a20:	80 61       	ori	r24, 0x10	; 16
+     a22:	8e b9       	out	0x0e, r24	; 14
+     a24:	08 95       	ret
+
+00000a26 <main>:
+     a26:	cf 93       	push	r28
 }
-*/
 
 // Main function handles inputs and interrups. Elevator logic is in the controller file
 int main(void) {
-     a12:	cf 93       	push	r28
-     a14:	df 93       	push	r29
-     a16:	00 d0       	rcall	.+0      	; 0xa18 <main+0x6>
-     a18:	cd b7       	in	r28, 0x3d	; 61
-     a1a:	de b7       	in	r29, 0x3e	; 62
+     a28:	df 93       	push	r29
+     a2a:	00 d0       	rcall	.+0      	; 0xa2c <main+0x6>
+     a2c:	cd b7       	in	r28, 0x3d	; 61
+     a2e:	de b7       	in	r29, 0x3e	; 62
+	setup();
+     a30:	f0 df       	rcall	.-32     	; 0xa12 <setup>
 	uart_init(103); // UART for debug
-     a1c:	87 e6       	ldi	r24, 0x67	; 103
-     a1e:	90 e0       	ldi	r25, 0x00	; 0
-     a20:	89 d0       	rcall	.+274    	; 0xb34 <uart_init>
-	lcd_init(LCD_DISP_ON);
-     a22:	8c e0       	ldi	r24, 0x0C	; 12
+     a32:	87 e6       	ldi	r24, 0x67	; 103
+     a34:	90 e0       	ldi	r25, 0x00	; 0
 	lcd_clrscr();
-     a24:	ad df       	rcall	.-166    	; 0x980 <lcd_init>
-	KEYPAD_Init();
-     a26:	89 df       	rcall	.-238    	; 0x93a <lcd_clrscr>
-     a28:	43 de       	rcall	.-890    	; 0x6b0 <KEYPAD_Init>
-	TWI_init();
-     a2a:	f5 db       	rcall	.-2070   	; 0x216 <TWI_init>
-     a2c:	2f ef       	ldi	r18, 0xFF	; 255
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
-     a2e:	81 ee       	ldi	r24, 0xE1	; 225
-     a30:	94 e0       	ldi	r25, 0x04	; 4
-     a32:	21 50       	subi	r18, 0x01	; 1
-     a34:	80 40       	sbci	r24, 0x00	; 0
-     a36:	90 40       	sbci	r25, 0x00	; 0
-     a38:	e1 f7       	brne	.-8      	; 0xa32 <main+0x20>
-     a3a:	00 c0       	rjmp	.+0      	; 0xa3c <main+0x2a>
-	_delay_ms(100); // Add a small delay to ensure the screen clears
+     a36:	7e d0       	rcall	.+252    	; 0xb34 <uart_init>
 	lcd_puts("Hello world");
-     a3c:	00 00       	nop
-     a3e:	80 e0       	ldi	r24, 0x00	; 0
-     a40:	94 e0       	ldi	r25, 0x04	; 4
-     a42:	90 df       	rcall	.-224    	; 0x964 <lcd_puts>
+     a38:	80 df       	rcall	.-256    	; 0x93a <lcd_clrscr>
+     a3a:	80 e0       	ldi	r24, 0x00	; 0
+	KEYPAD_Init();
+     a3c:	94 e0       	ldi	r25, 0x04	; 4
+     a3e:	92 df       	rcall	.-220    	; 0x964 <lcd_puts>
+	TWI_init();
+     a40:	37 de       	rcall	.-914    	; 0x6b0 <KEYPAD_Init>
+     a42:	e9 db       	rcall	.-2094   	; 0x216 <TWI_init>
 	
 	elevator_reset_ui();  // Initial UI prompt
      a44:	97 dc       	rcall	.-1746   	; 0x374 <elevator_reset_ui>
@@ -1926,7 +1930,7 @@ int main(void) {
      a52:	e2 dd       	rcall	.-1084   	; 0x618 <isr_init>
      a54:	84 e0       	ldi	r24, 0x04	; 4
      a56:	e2 dd       	rcall	.-1084   	; 0x61c <enable_external_interrupt>
-	lcd_puts("Hello world");
+	TWI_init();
 	
 	elevator_reset_ui();  // Initial UI prompt
 
@@ -1945,9 +1949,9 @@ int main(void) {
 		if (key >= '0' && key <= '9' && buffer_index < 2) {
      a5e:	98 0f       	add	r25, r24
      a60:	9a 30       	cpi	r25, 0x0A	; 10
-     a62:	e8 f4       	brcc	.+58     	; 0xa9e <main+0x8c>
+     a62:	e8 f4       	brcc	.+58     	; 0xa9e <main+0x78>
      a64:	12 30       	cpi	r17, 0x02	; 2
-     a66:	d8 f4       	brcc	.+54     	; 0xa9e <main+0x8c>
+     a66:	d8 f4       	brcc	.+54     	; 0xa9e <main+0x78>
      a68:	01 e0       	ldi	r16, 0x01	; 1
 			input_buffer[buffer_index++] = key;
      a6a:	01 0f       	add	r16, r17
@@ -1979,15 +1983,15 @@ int main(void) {
      a96:	01 96       	adiw	r24, 0x01	; 1
      a98:	66 d0       	rcall	.+204    	; 0xb66 <print>
 
-		} else if (key == '#') {
+		} else if (key == '#') { // # Is used on the keypad to select the floor and start moving elevator towards it
      a9a:	10 2f       	mov	r17, r16
 			if (buffer_index > 0) {
-     a9c:	de cf       	rjmp	.-68     	; 0xa5a <main+0x48>
+     a9c:	de cf       	rjmp	.-68     	; 0xa5a <main+0x34>
      a9e:	83 32       	cpi	r24, 0x23	; 35
 				uint8_t target_floor = atoi(input_buffer);
-     aa0:	e9 f4       	brne	.+58     	; 0xadc <main+0xca>
+     aa0:	e9 f4       	brne	.+58     	; 0xadc <main+0xb6>
      aa2:	11 23       	and	r17, r17
-     aa4:	c1 f0       	breq	.+48     	; 0xad6 <main+0xc4>
+     aa4:	c1 f0       	breq	.+48     	; 0xad6 <main+0xb0>
 
 				if (target_floor <= MAX_FLOOR) {
      aa6:	ce 01       	movw	r24, r28
@@ -1995,12 +1999,12 @@ int main(void) {
 					move_elevator(target_floor);
      aaa:	77 d0       	rcall	.+238    	; 0xb9a <atoi>
      aac:	84 36       	cpi	r24, 0x64	; 100
-     aae:	10 f4       	brcc	.+4      	; 0xab4 <main+0xa2>
+     aae:	10 f4       	brcc	.+4      	; 0xab4 <main+0x8e>
 					} else {
 					lcd_clrscr();
      ab0:	6f dd       	rcall	.-1314   	; 0x590 <move_elevator>
 					lcd_puts("Invalid floor");
-     ab2:	11 c0       	rjmp	.+34     	; 0xad6 <main+0xc4>
+     ab2:	11 c0       	rjmp	.+34     	; 0xad6 <main+0xb0>
      ab4:	42 df       	rcall	.-380    	; 0x93a <lcd_clrscr>
      ab6:	8c e0       	ldi	r24, 0x0C	; 12
      ab8:	94 e0       	ldi	r25, 0x04	; 4
@@ -2009,6 +2013,12 @@ int main(void) {
      abc:	8c e0       	ldi	r24, 0x0C	; 12
      abe:	94 e0       	ldi	r25, 0x04	; 4
      ac0:	52 d0       	rcall	.+164    	; 0xb66 <print>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
      ac2:	2f ef       	ldi	r18, 0xFF	; 255
      ac4:	83 ed       	ldi	r24, 0xD3	; 211
      ac6:	90 e3       	ldi	r25, 0x30	; 48
@@ -2017,8 +2027,8 @@ int main(void) {
      acc:	90 40       	sbci	r25, 0x00	; 0
 					_delay_ms(1000);
 					elevator_reset_ui();
-     ace:	e1 f7       	brne	.-8      	; 0xac8 <main+0xb6>
-     ad0:	00 c0       	rjmp	.+0      	; 0xad2 <main+0xc0>
+     ace:	e1 f7       	brne	.-8      	; 0xac8 <main+0xa2>
+     ad0:	00 c0       	rjmp	.+0      	; 0xad2 <main+0xac>
 				}
 			}
 
@@ -2033,10 +2043,10 @@ int main(void) {
      ad8:	10 e0       	ldi	r17, 0x00	; 0
 			buffer_index = 0;
 			input_buffer[0] = '\0';
-     ada:	bf cf       	rjmp	.-130    	; 0xa5a <main+0x48>
+     ada:	bf cf       	rjmp	.-130    	; 0xa5a <main+0x34>
 			lcd_gotoxy(0, 1);
      adc:	8a 32       	cpi	r24, 0x2A	; 42
-     ade:	61 f4       	brne	.+24     	; 0xaf8 <main+0xe6>
+     ade:	61 f4       	brne	.+24     	; 0xaf8 <main+0xd2>
      ae0:	19 82       	std	Y+1, r1	; 0x01
      ae2:	61 e0       	ldi	r22, 0x01	; 1
 			lcd_puts("              ");  // Clear line
@@ -2056,7 +2066,7 @@ int main(void) {
 		} else if (key == '*') { 			// Clear input
 			buffer_index = 0;
      af4:	10 e0       	ldi	r17, 0x00	; 0
-     af6:	b1 cf       	rjmp	.-158    	; 0xa5a <main+0x48>
+     af6:	b1 cf       	rjmp	.-158    	; 0xa5a <main+0x34>
 			input_buffer[0] = '\0';
 			lcd_gotoxy(0, 1);
 			lcd_puts("              ");  // Clear line
@@ -2076,7 +2086,7 @@ int main(void) {
 		} else { // Reset input
 			print("No such floor exists. Floor selection has been reset.");
 			buffer_index = 0;
-     b02:	ab cf       	rjmp	.-170    	; 0xa5a <main+0x48>
+     b02:	ab cf       	rjmp	.-170    	; 0xa5a <main+0x34>
 
 00000b04 <uart_putchar>:
 	// Redirect std I/O streams to UART

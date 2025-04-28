@@ -530,8 +530,10 @@ END GROUP
  .text.lcd_init
                 0x00000980       0x92 lcd_controller_MEGA/lcd.o
                 0x00000980                lcd_init
- .text.main     0x00000a12       0xf2 main.o
-                0x00000a12                main
+ .text.setup    0x00000a12       0x14 main.o
+                0x00000a12                setup
+ .text.main     0x00000a26       0xde main.o
+                0x00000a26                main
  .text.uart_putchar
                 0x00000b04       0x20 uart_debug/uart_debug.o
                 0x00000b04                uart_putchar
@@ -735,7 +737,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x1e8
+.debug_aranges  0x00000000      0x1f0
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x40 communication/communication_master.o
@@ -748,14 +750,14 @@ END GROUP
  .debug_aranges
                 0x00000108       0x88 lcd_controller_MEGA/lcd.o
  .debug_aranges
-                0x00000190       0x20 main.o
+                0x00000190       0x28 main.o
  .debug_aranges
-                0x000001b0       0x38 uart_debug/uart_debug.o
+                0x000001b8       0x38 uart_debug/uart_debug.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2a8c
+.debug_info     0x00000000     0x2a7f
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xbbc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_info    0x00000bbc      0x39c communication/communication_master.o
@@ -763,10 +765,10 @@ END GROUP
  .debug_info    0x000018c4       0xe5 isr_controller/isr_controller.o
  .debug_info    0x000019a9      0x283 keypad_controller/keypad.o
  .debug_info    0x00001c2c      0x793 lcd_controller_MEGA/lcd.o
- .debug_info    0x000023bf      0x421 main.o
- .debug_info    0x000027e0      0x2ac uart_debug/uart_debug.o
+ .debug_info    0x000023bf      0x414 main.o
+ .debug_info    0x000027d3      0x2ac uart_debug/uart_debug.o
 
-.debug_abbrev   0x00000000     0x1644
+.debug_abbrev   0x00000000     0x165c
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0xb1a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_abbrev  0x00000b1a      0x1a9 communication/communication_master.o
@@ -774,10 +776,10 @@ END GROUP
  .debug_abbrev  0x00000ee4       0xb1 isr_controller/isr_controller.o
  .debug_abbrev  0x00000f95      0x137 keypad_controller/keypad.o
  .debug_abbrev  0x000010cc      0x274 lcd_controller_MEGA/lcd.o
- .debug_abbrev  0x00001340      0x15d main.o
- .debug_abbrev  0x0000149d      0x1a7 uart_debug/uart_debug.o
+ .debug_abbrev  0x00001340      0x175 main.o
+ .debug_abbrev  0x000014b5      0x1a7 uart_debug/uart_debug.o
 
-.debug_line     0x00000000     0x175b
+.debug_line     0x00000000     0x1777
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1fa C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_line    0x000001fa      0x29d communication/communication_master.o
@@ -785,20 +787,20 @@ END GROUP
  .debug_line    0x00000949      0x138 isr_controller/isr_controller.o
  .debug_line    0x00000a81      0x2c8 keypad_controller/keypad.o
  .debug_line    0x00000d49      0x5a2 lcd_controller_MEGA/lcd.o
- .debug_line    0x000012eb      0x313 main.o
- .debug_line    0x000015fe      0x15d uart_debug/uart_debug.o
+ .debug_line    0x000012eb      0x32f main.o
+ .debug_line    0x0000161a      0x15d uart_debug/uart_debug.o
 
-.debug_frame    0x00000000      0x42c
+.debug_frame    0x00000000      0x43c
  *(.debug_frame)
  .debug_frame   0x00000000       0x98 communication/communication_master.o
  .debug_frame   0x00000098       0xd4 elevator_controller/elevator_controller.o
  .debug_frame   0x0000016c       0x8c isr_controller/isr_controller.o
  .debug_frame   0x000001f8       0x64 keypad_controller/keypad.o
  .debug_frame   0x0000025c      0x134 lcd_controller_MEGA/lcd.o
- .debug_frame   0x00000390       0x34 main.o
- .debug_frame   0x000003c4       0x68 uart_debug/uart_debug.o
+ .debug_frame   0x00000390       0x44 main.o
+ .debug_frame   0x000003d4       0x68 uart_debug/uart_debug.o
 
-.debug_str      0x00000000      0xa3c
+.debug_str      0x00000000      0xa42
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_str     0x000003e6      0x23d communication/communication_master.o
@@ -811,20 +813,20 @@ END GROUP
                                 0x274 (size before relaxing)
  .debug_str     0x0000089e       0xe3 lcd_controller_MEGA/lcd.o
                                 0x2e0 (size before relaxing)
- .debug_str     0x00000981       0x3a main.o
-                                0x2c3 (size before relaxing)
- .debug_str     0x000009bb       0x81 uart_debug/uart_debug.o
+ .debug_str     0x00000981       0x40 main.o
+                                0x2c9 (size before relaxing)
+ .debug_str     0x000009c1       0x81 uart_debug/uart_debug.o
                                 0x22e (size before relaxing)
 
-.debug_loc      0x00000000     0x125c
+.debug_loc      0x00000000     0x1214
  *(.debug_loc)
  .debug_loc     0x00000000      0x218 communication/communication_master.o
  .debug_loc     0x00000218      0x3b2 elevator_controller/elevator_controller.o
  .debug_loc     0x000005ca       0xec isr_controller/isr_controller.o
  .debug_loc     0x000006b6      0x2c5 keypad_controller/keypad.o
  .debug_loc     0x0000097b      0x659 lcd_controller_MEGA/lcd.o
- .debug_loc     0x00000fd4      0x199 main.o
- .debug_loc     0x0000116d       0xef uart_debug/uart_debug.o
+ .debug_loc     0x00000fd4      0x151 main.o
+ .debug_loc     0x00001125       0xef uart_debug/uart_debug.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -844,15 +846,15 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x178
+.debug_ranges   0x00000000      0x180
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x30 communication/communication_master.o
  .debug_ranges  0x00000030       0x48 elevator_controller/elevator_controller.o
  .debug_ranges  0x00000078       0x20 isr_controller/isr_controller.o
  .debug_ranges  0x00000098       0x30 keypad_controller/keypad.o
  .debug_ranges  0x000000c8       0x78 lcd_controller_MEGA/lcd.o
- .debug_ranges  0x00000140       0x10 main.o
- .debug_ranges  0x00000150       0x28 uart_debug/uart_debug.o
+ .debug_ranges  0x00000140       0x18 main.o
+ .debug_ranges  0x00000158       0x28 uart_debug/uart_debug.o
 
 .debug_macro
  *(.debug_macro)

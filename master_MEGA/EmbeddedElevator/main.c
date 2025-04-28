@@ -4,6 +4,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "isr_controller/isr_controller.h"
 #include "elevator_controller/elevator_controller.h"
 #include "keypad_controller/keypad.h"
@@ -11,29 +12,25 @@
 #include "uart_debug/uart_debug.h"
 #include "communication/communication_master.h"
 
-#define MAX_FLOOR 99  // Assuming the maximum floor is 99
+#define MAX_FLOOR 99
 
-/*
-uint8_t isEmergencyButtonPressed(void) {
-	uint8_t pressed = !(PINE & (1 << EMERGENCY_BUTTON_PIN));
-	if (pressed == 1) {
-		print("Pressed");	
-	} else {
-		print("Not pressed");	
-	}
-	return pressed;
+void setup() {
+	lcd_init(LCD_DISP_ON);// initialize the LCD
+	KEYPAD_Init(); //initialize the keypad
+	
+	// Set pin as input and enable internal pull-up to make ISR emergency system work
+	DDRE &= ~(1 << 4);    // Set PE4 as input
+	PORTE |= (1 << 4);    // Enable pull-up resistor on PE4
 }
-*/
 
 // Main function handles inputs and interrups. Elevator logic is in the controller file
 int main(void) {
+	setup();
 	uart_init(103); // UART for debug
-	lcd_init(LCD_DISP_ON);
 	lcd_clrscr();
+	lcd_puts("Hello world");
 	KEYPAD_Init();
 	TWI_init();
-	_delay_ms(100); // Add a small delay to ensure the screen clears
-	lcd_puts("Hello world");
 	
 	elevator_reset_ui();  // Initial UI prompt
 
@@ -57,7 +54,7 @@ int main(void) {
 			lcd_puts(input_buffer);
 			print(input_buffer);
 
-		} else if (key == '#') {
+		} else if (key == '#') { // # Is used on the keypad to select the floor and start moving elevator towards it
 			if (buffer_index > 0) {
 				uint8_t target_floor = atoi(input_buffer);
 
