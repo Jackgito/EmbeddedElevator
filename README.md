@@ -5,18 +5,17 @@ This project is the final coursework for the **Introduction to Embedded Systems*
 
 ## **Core Functionalities**
 ### **1. Floor Selection via Keypad**
-- Users enter a floor number (0-99) using a **4x4 keypad** connected to MEGA.
+- Users enter a floor number (0-99) using a keypad connected to MEGA.
 - The **LCD screen** displays the selected floor and elevator status in real-time.
 
 ### **2. Elevator Movement**
 - The system processes floor requests and moves the elevator accordingly.
 - A **movement LED** on UNO lights up when the elevator is in motion.
 - The LCD screen updates the **current floor number** during movement.
-- Elevator supports floor queue, meaning floor numbers can be entered while the elevator is moving, and will move according to queue.
 
 ### **3. Door Operation**
 - Upon reaching the destination, the **door LED** turns on for **5 seconds** to simulate door opening.
-- The LCD screen displays **"Door Open"** and **"Door Closed"** messages appropriately.
+- The LCD screen displays **"Door Open"** and **"Door Closed"** messages.
 
 ### **4. Emergency Handling**
 - An **external emergency button** connected to MEGA allows users to stop the elevator during movement.
@@ -24,31 +23,15 @@ This project is the final coursework for the **Introduction to Embedded Systems*
   - The LCD displays **"EMERGENCY"**.
   - The movement LED blinks **three times**.
   - The buzzer plays an emergency **melody**.
-  - The door opens automatically.
-- Enhanced emergency levels allow users to manually confirm door opening or keep the alarm active until deactivation.
+  - The door opens automatically, and then closes after few seconds.
 
 ### **5. Communication Between MEGA & UNO**
-- **I2C communication** is used for data exchange between the two microcontrollers.
-- MEGA sends commands to UNO, such as:
-  - **Turning LEDs ON/OFF**.
-  - **Activating the buzzer** for alerts.
-  - **Handling door control events**.
-- UNO receives and processes these commands to execute the appropriate actions.
-
-## **Project Structure**
-- **Master (MEGA):** Handles input (keypad), display (LCD), decision-making, and emergency handling.
-- **Slave (UNO):** Controls movement indicators (LEDs), door mechanism, and buzzer alerts.
-
-## **Group Members & Responsibilities**
-| Name       | Responsibility                         |
-|------------|----------------------------------|
-| **Aleksi**  | Circuit & report |
-| **Jericho** | Slave logic |
-| **Juhani**  | Project codebase setup, master logic & TWI communication |
-| **Niklas**  | Report |
+- **TWI communication** is used for data exchange between the two microcontrollers.
+- MEGA sends commands to UNO that control the LEDs and the buzzer
 
 ## Image ##
 ![picture](https://github.com/user-attachments/assets/0866b3c5-1862-4b96-8c9d-32f67bfdc57b)
 
 ## **Circuit Diagram**
-*To be added.*
+![image](https://github.com/user-attachments/assets/f1b9786a-95b2-47c5-b53a-627e0f3a39cd)
+
